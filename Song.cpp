@@ -33,7 +33,7 @@ QImage* Song::cover() const
     return m_cover;
 }
 
-//QFile Song::file() const
-//{
-//    return m_file;
-//}
+QString Song::fileName() const
+{
+    return m_fileName;
+}

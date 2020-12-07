@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void setDefaultCover();
 
 private slots:
     void on_progressSlider_sliderMoved(int position);
