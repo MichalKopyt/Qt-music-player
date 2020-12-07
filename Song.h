@@ -13,21 +13,26 @@ class Song : public QObject
     Q_PROPERTY(QString artist READ artist)
     Q_PROPERTY(QString album READ album)
     Q_PROPERTY(unsigned int year READ year)
-    Q_PROPERTY(QImage cover READ cover)
-    Q_PROPERTY(QFile file READ file)
+    Q_PROPERTY(QImage* cover READ cover)
+//    Q_PROPERTY(QFile file READ file)
 
 public:
     explicit Song();
-
+    QString title() const;
+    QString artist() const;
+    QString album() const;
+    unsigned int year() const;
+    QImage* cover() const;
+//    QFile file() const;
 signals:
 
 private:
     QString m_title;
     QString m_artist;
     QString m_album;
-    unsigned int year;
-    QImage m_cover;
-    QFile m_file;
+    unsigned int m_year;
+    QImage* m_cover;
+//    QFile m_file;
 
 };
 
