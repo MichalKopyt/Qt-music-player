@@ -5,6 +5,7 @@
 #include <QVariant>
 #include <QImage>
 #include <QFile>
+#include <QMediaPlayer>
 
 class Song : public QObject
 {
@@ -12,28 +13,32 @@ class Song : public QObject
     Q_PROPERTY(QString title READ title)
     Q_PROPERTY(QString artist READ artist)
     Q_PROPERTY(QString album READ album)
-    Q_PROPERTY(unsigned int year READ year)
-    Q_PROPERTY(QImage* cover READ cover)
+    Q_PROPERTY(QString year READ year)
+    Q_PROPERTY(QImage cover READ cover)
     Q_PROPERTY(QString fileName READ fileName)
 
 public:
-    explicit Song();
+    explicit Song(QString fileName);
     QString title() const;
     QString artist() const;
     QString album() const;
-    unsigned int year() const;
-    QImage* cover() const;
+    QString year() const;
+    QImage cover() const;
     QString fileName() const;
 signals:
+    void songFileReady(Song*);
+private slots:
+    void on_metadata_changed();
 
 private:
+    QString m_fileName;
     QString m_title;
     QString m_artist;
     QString m_album;
-    unsigned int m_year;
-    QImage* m_cover;
-    QString m_fileName;
-
+    QString m_year;
+    QImage m_cover;
+    QMediaPlayer* metadataLoader;
+    void setMetadataLoader();
 };
 
 #endif // SONG_H

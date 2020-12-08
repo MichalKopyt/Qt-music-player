@@ -31,14 +31,18 @@ private slots:
 
     void on_action_Open_file_triggered();
 
-    void on_media_loaded();
+    //void on_media_loaded();
 
     void on_playButton_clicked();
+
+    void on_tableView_doubleClicked(const QModelIndex &index);
 
 private:
     Ui::MainWindow *ui;
     QMediaPlayer* player;
     QString fileName;
     SongsModel* model;
+    Song* currentSong;
+    void setCurrentMetadata();
 };
 #endif // MAINWINDOW_H

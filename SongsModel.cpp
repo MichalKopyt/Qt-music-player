@@ -1,13 +1,14 @@
 #include "SongsModel.h"
+#include <iostream>
 
-SongsModel::SongsModel(QSize s, QObject *parent) : QAbstractItemModel(parent), m_size(s) {}
+SongsModel::SongsModel(QSize s, QObject *parent) : QAbstractTableModel(parent), m_size(s) {}
 
 int SongsModel::rowCount(const QModelIndex &parent) const {
     return parent.isValid() ? 0 : size().height();
 }
 
 int SongsModel::columnCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : size().width();
+    return parent.isValid() ? 0 : 4;
 }
 
 QModelIndex SongsModel::index(int row, int column, const QModelIndex &parent) const {
@@ -23,29 +24,70 @@ QModelIndex SongsModel::parent(const QModelIndex &index) const {
 }
 
 QVariant SongsModel::data(const QModelIndex &index, int role) const {
-    if (role == Qt::DecorationRole || role == (int) SongRole::cover){
-
+    if (index.column() == 0){
+        if (index.row() < songsList.length())
+            return songsList[index.row()]->title();
     }
-    if (role == Qt::ToolTipRole){
-
+    if (index.column() == 1){
+        if (index.row() < songsList.length())
+            return songsList[index.row()]->artist();
     }
-    if (role == (int) SongRole::title){
-
+    if (index.column() == 2){
+        if (index.row() < songsList.length())
+            return songsList[index.row()]->album();
     }
-    if (role == (int) SongRole::artist){
-
-    }
-    if (role == (int) SongRole::album){
-
-    }
-    if (role == (int) SongRole::year){
-
+    if (index.column() == 3){
+        if (index.row() < songsList.length())
+            return songsList[index.row()]->year();
     }
     return QVariant();
 }
 
 QSize SongsModel::size() const {
     return m_size;
+}
+
+void SongsModel::addSong(QString fileName) {
+    addSong(new Song(fileName));
+}
+
+void SongsModel::addSong(Song* song) {
+    songsList.append(song);
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    insertRows(rowCount(), 1);
+    endInsertRows();
+    emit dataChanged(index(rowCount(), 0), index(rowCount(), 3));
+    std::cout << rowCount() << " " << columnCount() << std::endl;
+}
+
+QVariant SongsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
+        switch (section) {
+        case 0:
+            return QString("Title");
+        case 1:
+            return QString("Artist");
+        case 2:
+            return QString("Album");
+        case 3:
+            return QString("Year");
+        }
+    }
+    return QVariant();
+}
+
+bool SongsModel::insertRows(int row, int count, const QModelIndex &parent){
+    if (row == rowCount()){
+        setSize(QSize(rowCount() + count, columnCount()));
+        return true;
+    }
+    return false;
+}
+
+Song* SongsModel::getSong(int songIndex){
+    if (songIndex < 0 || songIndex >= songsList.length())
+        return nullptr;
+    return songsList[songIndex];
 }
 
 void SongsModel::setSize(const QSize &s) {

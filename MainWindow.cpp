@@ -4,7 +4,9 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "Song.h"
+#include <QMediaMetaData>
 
+static QImage img("C:/music/cover.png");
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -15,9 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
-    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_loaded);
+    //connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_loaded);
 
-    model = new SongsModel(QSize(0, 0), this);
+    model = new SongsModel(QSize(4, 0), this);
     //model->setData();
     ui->tableView->setModel(model);
 }
@@ -33,7 +35,6 @@ void MainWindow::setDefaultCover()
     QRect rect = ui->verticalLayout->geometry();
     ui->coverLabel->setPixmap(cover.scaled(rect.height(), rect.height()));
 }
-
 
 void MainWindow::on_progressSlider_sliderMoved(int position)
 {
@@ -73,30 +74,72 @@ void MainWindow::on_duration_changed(qint64 position)
 
 void MainWindow::on_action_Open_file_triggered()
 {
-    fileName = QFileDialog::getOpenFileName(this, "Open mp3 file", "C://");
-    std::cout << fileName.toStdString() << std::endl;
+    QStringList filePaths = QFileDialog::getOpenFileNames(this, "Open mp3 files");
+    Song* songPtr;
+    for (QString file : filePaths){
+        songPtr = new Song(file);
+        connect(songPtr, &Song::songFileReady, [=](Song* s) {
+            model->addSong(s);
+        });
+    }
 }
 
-void MainWindow::on_media_loaded()
+/*void MainWindow::on_media_loaded()
 {
     if (player->mediaStatus() == QMediaPlayer::LoadedMedia){
+            if (player->isMetaDataAvailable()) {
+                std::cout << "META_DATA_AVAILABLE" << std::endl;
+                ui->playedSongLabel->setText(player->metaData(QMediaMetaData::AlbumArtist).toString()
+                                             + " - " +
+                                             player->metaData(QMediaMetaData::Title).toString());
+                QUrl url = player->metaData(QMediaMetaData::CoverArtUrlLarge).value<QUrl>();
+                if (!url.isEmpty())
+                    setCover(url.toString());
+                else
+                    setDefaultCover();
+            } else
+                std::cout << "META_DATA_NOT_AVAILABLE" << std::endl;
         player->play();
     }
-    Song song;
-}
+}*/
 
 void MainWindow::on_playButton_clicked()
 {
     if (fileName.isNull())
         return;
     if (ui->playButton->text() == "Start") {
-        if (player->mediaStatus() == QMediaPlayer::NoMedia)
+        if (player->mediaStatus() == QMediaPlayer::NoMedia || !(player->currentMedia().request().url().toString().endsWith(fileName))){
             player->setMedia(QUrl::fromLocalFile(fileName));
-        else
-            player->play();
+            setCurrentMetadata();
+        }
+        player->play();
         ui->playButton->setText("Stop");
     } else if (ui->playButton->text() == "Stop") {
-        player->pause();
-        ui->playButton->setText("Start");
+        if (player->mediaStatus() == QMediaPlayer::NoMedia || !(player->currentMedia().request().url().toString().endsWith(fileName))){
+            player->stop();
+            player->setMedia(QUrl::fromLocalFile(fileName));
+            setCurrentMetadata();
+            player->play();
+        } else {
+            player->pause();
+            ui->playButton->setText("Start");
+        }
     }
+}
+
+void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
+{
+    currentSong = model->getSong(index.row());
+    fileName = currentSong->fileName();
+    on_playButton_clicked();
+}
+
+void MainWindow::setCurrentMetadata()
+{
+    ui->playedSongLabel->setText(currentSong->artist() + " - " + currentSong->title());
+
+    QPixmap cover;
+    cover.convertFromImage(currentSong->cover());
+    QRect rect = ui->verticalLayout->geometry();
+    ui->coverLabel->setPixmap(cover.scaled(rect.height(), rect.height()));
 }
