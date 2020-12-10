@@ -74,7 +74,9 @@ void MainWindow::on_duration_changed(qint64 position)
 
 void MainWindow::on_action_Open_file_triggered()
 {
-    QStringList filePaths = QFileDialog::getOpenFileNames(this, "Open mp3 files");
+//    QStringList filePaths = QFileDialog::getOpenFileNames(this, "Open mp3 files");
+    QStringList filePaths = QFileDialog::getOpenFileNames(this,
+        "Open files", QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "MP3 files (*.mp3)");
     Song* songPtr;
     for (QString file : filePaths){
         songPtr = new Song(file);

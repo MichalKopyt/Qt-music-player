@@ -1,7 +1,7 @@
 #include "SongsModel.h"
 #include <iostream>
 
-SongsModel::SongsModel(QSize s, QObject *parent) : QAbstractTableModel(parent), m_size(s) {}
+SongsModel::SongsModel( QObject *parent) : QAbstractTableModel(parent), m_size(0, 4) {}
 
 int SongsModel::rowCount(const QModelIndex &parent) const {
     return parent.isValid() ? 0 : size().height();
