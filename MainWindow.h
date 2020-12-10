@@ -29,13 +29,15 @@ private slots:
 
     void on_duration_changed(qint64 position);
 
-    void on_action_Open_file_triggered();
-
-    //void on_media_loaded();
+    void on_action_Open_files_triggered();
 
     void on_playButton_clicked();
 
     void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_action_Delete_files_triggered();
+
+    void on_action_Clear_playlist_triggered();
 
 private:
     Ui::MainWindow *ui;

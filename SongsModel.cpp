@@ -1,20 +1,20 @@
 #include "SongsModel.h"
-#include <iostream>
+#include <QFont>
 
-SongsModel::SongsModel( QObject *parent) : QAbstractTableModel(parent), m_size(0, 4) {}
+SongsModel::SongsModel( QObject *parent) : QAbstractTableModel(parent) {}
 
 int SongsModel::rowCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : size().height();
+    return parent.isValid() ? 0 : songsList.length();
 }
 
 int SongsModel::columnCount(const QModelIndex &parent) const {
-    return parent.isValid() ? 0 : 4;
+    return parent.isValid() ? 0 : 3;
 }
 
 QModelIndex SongsModel::index(int row, int column, const QModelIndex &parent) const {
     if (parent.isValid())
         return QModelIndex();
-    if (row >= size().height() || column >= size().width() || column < 0 || row < 0)
+    if (row >= rowCount() || column >= columnCount() || column < 0 || row < 0)
         return QModelIndex();
     return createIndex(row, column, nullptr);
 }
@@ -24,27 +24,28 @@ QModelIndex SongsModel::parent(const QModelIndex &index) const {
 }
 
 QVariant SongsModel::data(const QModelIndex &index, int role) const {
-    if (index.column() == 0){
-        if (index.row() < songsList.length())
-            return songsList[index.row()]->title();
-    }
-    if (index.column() == 1){
-        if (index.row() < songsList.length())
-            return songsList[index.row()]->artist();
-    }
-    if (index.column() == 2){
-        if (index.row() < songsList.length())
-            return songsList[index.row()]->album();
-    }
-    if (index.column() == 3){
-        if (index.row() < songsList.length())
-            return songsList[index.row()]->year();
+    switch (role){
+    case Qt::DisplayRole:
+        if (index.row() < songsList.length()){
+            switch (index.column()){
+            case 0:
+                return songsList[index.row()]->title();
+            case 1:
+                return songsList[index.row()]->artist();
+            case 2:
+                return songsList[index.row()]->album();
+            }
+        }
+        break;
+    case Qt::TextAlignmentRole:
+        return int(Qt::AlignLeft);
+    case Qt::ToolTipRole:
+        if (index.row() < songsList.length()){
+            return songsList[index.row()]->fileName();
+        }
+        break;
     }
     return QVariant();
-}
-
-QSize SongsModel::size() const {
-    return m_size;
 }
 
 void SongsModel::addSong(QString fileName) {
@@ -52,49 +53,39 @@ void SongsModel::addSong(QString fileName) {
 }
 
 void SongsModel::addSong(Song* song) {
-    songsList.append(song);
+    for (Song* s : songsList){
+        if (s->fileName() == song->fileName())
+            return;
+    }
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    insertRows(rowCount(), 1);
+    songsList.append(song);
     endInsertRows();
-    emit dataChanged(index(rowCount(), 0), index(rowCount(), 3));
-    std::cout << rowCount() << " " << columnCount() << std::endl;
 }
 
 QVariant SongsModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-        switch (section) {
-        case 0:
-            return QString("Title");
-        case 1:
-            return QString("Artist");
-        case 2:
-            return QString("Album");
-        case 3:
-            return QString("Year");
+    switch (role){
+    case Qt::DisplayRole:
+        if (orientation == Qt::Horizontal){
+            switch (section) {
+            case 0:
+                return QString("Title");
+            case 1:
+                return QString("Artist");
+            case 2:
+                return QString("Album");
+            }
         }
+        break;
+    case Qt::FontRole:
+        QFont boldFont;
+        boldFont.setBold(true);
+        return boldFont;
     }
     return QVariant();
-}
-
-bool SongsModel::insertRows(int row, int count, const QModelIndex &parent){
-    if (row == rowCount()){
-        setSize(QSize(rowCount() + count, columnCount()));
-        return true;
-    }
-    return false;
 }
 
 Song* SongsModel::getSong(int songIndex){
     if (songIndex < 0 || songIndex >= songsList.length())
         return nullptr;
     return songsList[songIndex];
-}
-
-void SongsModel::setSize(const QSize &s) {
-    if (m_size == s)
-        return;
-    beginResetModel();
-    m_size = s;
-    endResetModel();
-    emit sizeChanged(m_size);
 }

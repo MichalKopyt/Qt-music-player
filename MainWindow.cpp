@@ -12,14 +12,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     player = new QMediaPlayer(this);
 
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
     //connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_loaded);
 
-    model = new SongsModel(QSize(4, 0), this);
+    model = new SongsModel(this);
     //model->setData();
     ui->tableView->setModel(model);
 }
@@ -72,7 +72,7 @@ void MainWindow::on_duration_changed(qint64 position)
     ui->durationLabel->setText(labelText);
 }
 
-void MainWindow::on_action_Open_file_triggered()
+void MainWindow::on_action_Open_files_triggered()
 {
 //    QStringList filePaths = QFileDialog::getOpenFileNames(this, "Open mp3 files");
     QStringList filePaths = QFileDialog::getOpenFileNames(this,
@@ -85,25 +85,6 @@ void MainWindow::on_action_Open_file_triggered()
         });
     }
 }
-
-/*void MainWindow::on_media_loaded()
-{
-    if (player->mediaStatus() == QMediaPlayer::LoadedMedia){
-            if (player->isMetaDataAvailable()) {
-                std::cout << "META_DATA_AVAILABLE" << std::endl;
-                ui->playedSongLabel->setText(player->metaData(QMediaMetaData::AlbumArtist).toString()
-                                             + " - " +
-                                             player->metaData(QMediaMetaData::Title).toString());
-                QUrl url = player->metaData(QMediaMetaData::CoverArtUrlLarge).value<QUrl>();
-                if (!url.isEmpty())
-                    setCover(url.toString());
-                else
-                    setDefaultCover();
-            } else
-                std::cout << "META_DATA_NOT_AVAILABLE" << std::endl;
-        player->play();
-    }
-}*/
 
 void MainWindow::on_playButton_clicked()
 {
@@ -144,4 +125,14 @@ void MainWindow::setCurrentMetadata()
     cover.convertFromImage(currentSong->cover());
     QRect rect = ui->verticalLayout->geometry();
     ui->coverLabel->setPixmap(cover.scaled(rect.height(), rect.height()));
+}
+
+void MainWindow::on_action_Delete_files_triggered()
+{
+
+}
+
+void MainWindow::on_action_Clear_playlist_triggered()
+{
+
 }

@@ -13,12 +13,31 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="statusTip">
+   <string/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QTableView" name="tableView"/>
+       <widget class="QTableView" name="tableView">
+        <attribute name="horizontalHeaderCascadingSectionResizes">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>100</number>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+       </widget>
       </item>
       <item>
        <widget class="Line" name="line_2">
@@ -197,14 +216,25 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Open_file"/>
+    <addaction name="action_Open_files"/>
+    <addaction name="action_Delete_files"/>
+    <addaction name="action_Clear_playlist"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <action name="action_Open_file">
+  <action name="action_Open_files">
    <property name="text">
-    <string>&amp;Open file</string>
+    <string>&amp;Open files</string>
+   </property>
+  </action>
+  <action name="action_Delete_files">
+   <property name="text">
+    <string>&amp;Delete files</string>
+   </property>
+  </action>
+  <action name="action_Clear_playlist">
+   <property name="text">
+    <string>&amp;Clear playlist</string>
    </property>
   </action>
  </widget>
