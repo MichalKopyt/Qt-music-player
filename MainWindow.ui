@@ -22,6 +22,9 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QTableView" name="tableView">
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
         <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
         </attribute>
@@ -238,6 +241,15 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>progressSlider</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>playButton</tabstop>
+  <tabstop>nextButton</tabstop>
+  <tabstop>shuffleButton</tabstop>
+  <tabstop>volumeSlider</tabstop>
+  <tabstop>tableView</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

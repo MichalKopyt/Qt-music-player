@@ -39,6 +39,12 @@ private slots:
 
     void on_action_Clear_playlist_triggered();
 
+    void on_media_status_changed(QMediaPlayer::MediaStatus status);
+
+    void on_nextButton_clicked();
+
+    void on_previousButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QMediaPlayer* player;
@@ -46,5 +52,6 @@ private:
     SongsModel* model;
     Song* currentSong;
     void setCurrentMetadata();
+    void resetPlayer();
 };
 #endif // MAINWINDOW_H

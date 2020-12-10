@@ -22,6 +22,9 @@ public:
     void addSong(Song* song);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     Song* getSong(int songIndex);
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeAllRows(const QModelIndex &parent = QModelIndex());
+    int getSongIndex(Song* song);
 private:
     QList<Song*> songsList;
 };

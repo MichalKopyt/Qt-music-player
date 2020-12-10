@@ -4,7 +4,7 @@
 #include <iostream>
 
 Song::Song(QString fileName) : QObject(nullptr), m_fileName(fileName), m_title("UNKNOWN_TITLE"), m_artist("UNKNOWN_ARTIST"),
-    m_album("UNKNOW_ALBUM"), m_cover("C:/music/cover.png"){
+    m_album("UNKNOW_ALBUM"), m_cover(":/images/albumIcon.png"){
     setMetadataLoader();
 }
 

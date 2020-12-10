@@ -89,3 +89,23 @@ Song* SongsModel::getSong(int songIndex){
         return nullptr;
     return songsList[songIndex];
 }
+
+bool SongsModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if (row + count <= rowCount()){
+        beginRemoveRows(QModelIndex(), row, row + count - 1);
+        songsList.erase(songsList.begin() + row, songsList.begin() + row + count);
+        endRemoveRows();
+        return true;
+    }
+    return false;
+}
+
+bool SongsModel::removeAllRows(const QModelIndex &parent)
+{
+    return removeRows(0, rowCount(), parent);
+}
+
+int SongsModel::getSongIndex(Song *song){
+    return songsList.indexOf(song);
+}
