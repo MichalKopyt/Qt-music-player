@@ -29,7 +29,7 @@ private slots:
 
     void on_duration_changed(qint64 position);
 
-    void on_action_Open_files_triggered();
+    void on_action_Add_files_triggered();
 
     void on_playButton_clicked();
 
@@ -48,6 +48,8 @@ private slots:
     void on_progressSlider_sliderPressed();
 
     void on_progressSlider_sliderReleased();
+
+    void on_action_Exit_program_triggered();
 
 private:
     Ui::MainWindow *ui;

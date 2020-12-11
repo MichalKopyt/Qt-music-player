@@ -60,6 +60,8 @@ void SongsModel::addSong(Song* song) {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
     songsList.append(song);
     endInsertRows();
+    if (songsList.length() == 1)
+        emit songsAvailabilityChanged(true);
 }
 
 QVariant SongsModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -96,6 +98,8 @@ bool SongsModel::removeRows(int row, int count, const QModelIndex &parent)
         beginRemoveRows(QModelIndex(), row, row + count - 1);
         songsList.erase(songsList.begin() + row, songsList.begin() + row + count);
         endRemoveRows();
+        if (songsList.isEmpty())
+            emit songsAvailabilityChanged(false);
         return true;
     }
     return false;

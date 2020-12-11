@@ -22,8 +22,14 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QTableView" name="tableView">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>false</bool>
         </property>
         <attribute name="horizontalHeaderCascadingSectionResizes">
          <bool>false</bool>
@@ -149,6 +155,9 @@
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QPushButton" name="previousButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -162,6 +171,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="playButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -175,6 +187,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="nextButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>1</horstretch>
@@ -285,25 +300,53 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Open_files"/>
+    <addaction name="action_Add_files"/>
     <addaction name="action_Delete_files"/>
     <addaction name="action_Clear_playlist"/>
+    <addaction name="separator"/>
+    <addaction name="action_Exit_program"/>
    </widget>
    <addaction name="menu_File"/>
   </widget>
-  <action name="action_Open_files">
+  <action name="action_Add_files">
    <property name="text">
-    <string>&amp;Open files</string>
+    <string>&amp;Add files</string>
+   </property>
+   <property name="toolTip">
+    <string>Add files</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_Delete_files">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Delete files</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="action_Clear_playlist">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>&amp;Clear playlist</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_Exit_program">
+   <property name="text">
+    <string>&amp;Exit program</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
    </property>
   </action>
  </widget>

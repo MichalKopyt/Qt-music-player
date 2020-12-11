@@ -5,7 +5,6 @@
 #include "ui_MainWindow.h"
 #include "Song.h"
 #include <QMediaMetaData>
-#include <iostream>
 
 static QImage img("C:/music/cover.png");
 MainWindow::MainWindow(QWidget *parent)
@@ -15,14 +14,33 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     player = new QMediaPlayer(this);
-
+    model = new SongsModel(this);
+    ui->tableView->setModel(model);
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_status_changed);
-
-    model = new SongsModel(this);
-    //model->setData();
-    ui->tableView->setModel(model);
+    connect(model, &SongsModel::songsAvailabilityChanged, this, [=](bool b) {
+        ui->action_Clear_playlist->setEnabled(b);
+        if (!(ui->tableView->selectionModel()->selectedRows().isEmpty()))
+            ui->action_Delete_files->setEnabled(b);
+        ui->previousButton->setEnabled(b);
+        ui->playButton->setEnabled(b);
+        ui->nextButton->setEnabled(b);
+    });
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=](){
+        if (!(ui->tableView->selectionModel()->selectedRows().isEmpty())
+                && ui->action_Clear_playlist->isEnabled())
+            ui->action_Delete_files->setEnabled(true);
+        else
+            ui->action_Delete_files->setEnabled(false);
+    });
+    connect(ui->tableView, &QTableView::customContextMenuRequested, this, [=](QPoint pos){
+        QMenu* menu = new QMenu();
+        menu->addAction(ui->menu_File->actions()[0]);
+        menu->addAction(ui->menu_File->actions()[1]);
+        menu->addAction(ui->menu_File->actions()[2]);
+        menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
+    });
 }
 
 MainWindow::~MainWindow()
@@ -75,9 +93,8 @@ void MainWindow::on_duration_changed(qint64 position)
     ui->durationLabel->setText(labelText);
 }
 
-void MainWindow::on_action_Open_files_triggered()
+void MainWindow::on_action_Add_files_triggered()
 {
-//    QStringList filePaths = QFileDialog::getOpenFileNames(this, "Open mp3 files");
     QStringList filePaths = QFileDialog::getOpenFileNames(this,
         "Open files", QStandardPaths::writableLocation(QStandardPaths::MusicLocation), "MP3 files (*.mp3)");
     Song* songPtr;
@@ -232,4 +249,9 @@ void MainWindow::on_progressSlider_sliderPressed()
 void MainWindow::on_progressSlider_sliderReleased()
 {
     player->play();
+}
+
+void MainWindow::on_action_Exit_program_triggered()
+{
+    QCoreApplication::quit();
 }

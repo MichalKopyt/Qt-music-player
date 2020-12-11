@@ -7,8 +7,6 @@
 #include <QVariant>
 #include "Song.h"
 
-enum class SongRole { title = Qt::UserRole, artist, album, year, cover };
-
 class SongsModel : public QAbstractTableModel {
     Q_OBJECT
 public:
@@ -26,8 +24,7 @@ public:
     bool removeAllRows(const QModelIndex &parent = QModelIndex());
     int getSongIndex(Song* song);
 signals:
-    void becameEmpty();
-    void hasSongsNow();
+    void songsAvailabilityChanged(bool hasSongs);
 private:
     QList<Song*> songsList;
 };

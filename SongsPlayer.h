@@ -2,9 +2,8 @@
 #define SONGSPLAYER_H
 
 
-class SongsPlayer : public QObject
+class SongsPlayer
 {
-    Q_OBJECT
 public:
     SongsPlayer();
 };
