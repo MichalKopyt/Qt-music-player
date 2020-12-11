@@ -25,6 +25,9 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeAllRows(const QModelIndex &parent = QModelIndex());
     int getSongIndex(Song* song);
+signals:
+    void becameEmpty();
+    void hasSongsNow();
 private:
     QList<Song*> songsList;
 };

@@ -62,6 +62,8 @@ void MainWindow::on_position_changed(qint64 position)
 
 void MainWindow::on_duration_changed(qint64 position)
 {
+    if (position <= 0 && player->mediaStatus() != QMediaPlayer::NoMedia)
+        return;
     ui->progressSlider->setMaximum(position);
     int seconds = (position / 1000) % 60;
     int minutes = (position / 60000);
@@ -148,7 +150,6 @@ void MainWindow::resetPlayer()
     ui->playButton->setText("Start");
     fileName = nullptr;
     player->setMedia(QMediaContent());
-
 }
 
 void MainWindow::on_action_Delete_files_triggered()
@@ -221,4 +222,14 @@ void MainWindow::on_previousButton_clicked()
         player->play();
         ui->playButton->setText("Stop");
     }
+}
+
+void MainWindow::on_progressSlider_sliderPressed()
+{
+    player->pause();
+}
+
+void MainWindow::on_progressSlider_sliderReleased()
+{
+    player->play();
 }

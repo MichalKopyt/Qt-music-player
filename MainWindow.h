@@ -45,6 +45,10 @@ private slots:
 
     void on_previousButton_clicked();
 
+    void on_progressSlider_sliderPressed();
+
+    void on_progressSlider_sliderReleased();
+
 private:
     Ui::MainWindow *ui;
     QMediaPlayer* player;

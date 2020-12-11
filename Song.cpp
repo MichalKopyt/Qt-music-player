@@ -45,14 +45,22 @@ void Song::on_metadata_changed()
 {
     if (metadataLoader->isMetaDataAvailable()) {
         QStringList availableMetadata = metadataLoader->availableMetaData();
-        if (availableMetadata.contains("Title"))
+
+        if (availableMetadata.contains("Title")
+            && !(metadataLoader->metaData(QMediaMetaData::Title).toString().isEmpty()))
             m_title = metadataLoader->metaData(QMediaMetaData::Title).toString();
-        if (availableMetadata.contains("AlbumArtist"))
+
+        if (availableMetadata.contains("AlbumArtist")
+            && !(metadataLoader->metaData(QMediaMetaData::AlbumArtist).toString().isEmpty()))
             m_artist = metadataLoader->metaData(QMediaMetaData::AlbumArtist).toString();
-        if (availableMetadata.contains("AlbumTitle"))
+
+        if (availableMetadata.contains("AlbumTitle")
+            && !(metadataLoader->metaData(QMediaMetaData::AlbumTitle).toString().isEmpty()))
             m_album = metadataLoader->metaData(QMediaMetaData::AlbumTitle).toString();
+
         if (availableMetadata.contains("ThumbnailImage"))
             m_cover = metadataLoader->metaData(QMediaMetaData::ThumbnailImage).value<QImage>();
+
         emit songFileReady(this);
     }
 }

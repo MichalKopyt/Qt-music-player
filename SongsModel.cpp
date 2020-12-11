@@ -38,7 +38,7 @@ QVariant SongsModel::data(const QModelIndex &index, int role) const {
         }
         break;
     case Qt::TextAlignmentRole:
-        return int(Qt::AlignLeft);
+        return int(Qt::AlignLeft | Qt::AlignVCenter);
     case Qt::ToolTipRole:
         if (index.row() < songsList.length()){
             return songsList[index.row()]->fileName();
