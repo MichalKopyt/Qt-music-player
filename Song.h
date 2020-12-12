@@ -1,3 +1,9 @@
+/*
+ * File name: Song.h
+ * Author: Michał Kopyt (300231)
+ * Project: Qt Music Player
+ */
+
 #ifndef SONG_H
 #define SONG_H
 
@@ -26,7 +32,8 @@ public:
 signals:
     void songFileReady(Song*);
 private slots:
-    void on_metadata_changed();
+    //void on_metadata_changed();
+    void on_media_status_changed(QMediaPlayer::MediaStatus status);
 
 private:
     QString m_fileName;

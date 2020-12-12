@@ -1,6 +1,11 @@
-#include "MainWindow.h"
+/*
+ * File name: main.cpp
+ * Author: Michał Kopyt (300231)
+ * Project: Qt Music Player
+ */
 
 #include <QApplication>
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {

@@ -1,3 +1,9 @@
+/*
+ * File name: SongsModel.h
+ * Author: Michał Kopyt (300231)
+ * Project: Qt Music Player
+ */
+
 #ifndef SONGSLIST_H
 #define SONGSLIST_H
 

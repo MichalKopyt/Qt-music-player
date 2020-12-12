@@ -1,5 +1,11 @@
-#include "SongsModel.h"
+/*
+ * File name: SongsModel.cpp
+ * Author: Michał Kopyt (300231)
+ * Project: Qt Music Player
+ */
+
 #include <QFont>
+#include "SongsModel.h"
 
 SongsModel::SongsModel( QObject *parent) : QAbstractTableModel(parent) {}
 

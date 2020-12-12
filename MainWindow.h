@@ -1,3 +1,9 @@
+/*
+ * File name: MainWindow.h
+ * Author: Michał Kopyt (300231)
+ * Project: Qt Music Player
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -5,6 +11,7 @@
 #include <QMediaPlayer>
 #include <QtCore>
 #include <QtGui>
+#include <QLabel>
 #include <SongsModel.h>
 
 QT_BEGIN_NAMESPACE
@@ -59,5 +66,6 @@ private:
     Song* currentSong;
     void setCurrentMetadata();
     void resetPlayer();
+    void setTimeLabelText(QLabel* label, qint64 position);
 };
 #endif // MAINWINDOW_H
