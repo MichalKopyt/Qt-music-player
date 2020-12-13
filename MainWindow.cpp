@@ -20,10 +20,11 @@ MainWindow::MainWindow(QWidget *parent)
     player = new QMediaPlayer(this);
     model = new SongsModel(this);
     ui->tableView->setModel(model);
+
     connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
     connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
     connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_status_changed);
-    connect(model, &SongsModel::songsAvailabilityChanged, this, [=](bool b) {
+    connect(model, &SongsModel::songsAvailabilityChanged, this, [&](bool b) {
         ui->action_Clear_playlist->setEnabled(b);
         if (!(ui->tableView->selectionModel()->selectedRows().isEmpty()))
             ui->action_Delete_files->setEnabled(b);
@@ -31,14 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
         ui->playButton->setEnabled(b);
         ui->nextButton->setEnabled(b);
     });
-    connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [=](){
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, [&](){
         if (!(ui->tableView->selectionModel()->selectedRows().isEmpty())
                 && ui->action_Clear_playlist->isEnabled())
             ui->action_Delete_files->setEnabled(true);
         else
             ui->action_Delete_files->setEnabled(false);
     });
-    connect(ui->tableView, &QTableView::customContextMenuRequested, this, [=](QPoint pos){
+    connect(ui->tableView, &QTableView::customContextMenuRequested, this, [&](QPoint pos){
         QMenu* menu = new QMenu();
         menu->addAction(ui->menu_File->actions()[0]);
         menu->addAction(ui->menu_File->actions()[1]);
@@ -90,7 +91,7 @@ void MainWindow::on_action_Add_files_triggered()
     Song* songPtr;
     for (QString file : filePaths){
         songPtr = new Song(file);
-        connect(songPtr, &Song::songFileReady, [=](Song* s) {
+        connect(songPtr, &Song::songFileReady, [&](Song* s) {
             model->addSong(s);
         });
     }
@@ -107,16 +108,12 @@ void MainWindow::on_playButton_clicked()
             }
             fileName = currentSong->fileName();
             player->setMedia(QUrl::fromLocalFile(fileName));
-//            setCurrentMetadata();
-//            player->play();
-//            ui->playButton->setText("Stop");
         } else {
             return;
         }
     } else if (ui->playButton->text() == "Start") {
         if (player->mediaStatus() == QMediaPlayer::NoMedia || !(player->currentMedia().request().url().toString().endsWith(fileName))){
             player->setMedia(QUrl::fromLocalFile(fileName));
-            //setCurrentMetadata();
         } else {
             player->play();
             ui->playButton->setText("Stop");
@@ -125,8 +122,6 @@ void MainWindow::on_playButton_clicked()
         if (player->mediaStatus() == QMediaPlayer::NoMedia || !(player->currentMedia().request().url().toString().endsWith(fileName))){
             player->stop();
             player->setMedia(QUrl::fromLocalFile(fileName));
-//            setCurrentMetadata();
-//            player->play();
         } else {
             player->pause();
             ui->playButton->setText("Start");
@@ -181,13 +176,6 @@ void MainWindow::on_action_Delete_files_triggered()
             resetPlayer();
         model->removeRow(indexes[0].row());
     }
-//    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
-//    int countRows = indexes.count();
-//    for( int i = countRows - 1; i >= 0; --i){
-//        if (model->getSong(indexes.at(i).row())->fileName() == fileName)
-//            resetPlayer();
-//        model->removeRow(indexes.at(i).row());
-//    }
 }
 
 void MainWindow::on_action_Clear_playlist_triggered()
@@ -242,11 +230,6 @@ void MainWindow::on_nextButton_clicked()
     }
     fileName = currentSong->fileName();
     player->setMedia(QUrl::fromLocalFile(fileName));
-//    if (player->mediaStatus() == QMediaPlayer::LoadedMedia && player->state() != QMediaPlayer::PlayingState) {
-//        setCurrentMetadata();
-//        player->play();
-//        ui->playButton->setText("Stop");
-//    }
 }
 
 void MainWindow::on_previousButton_clicked()
@@ -262,11 +245,6 @@ void MainWindow::on_previousButton_clicked()
             currentSong = model->getSong((model->getSongIndex(currentSong) - 1));
         fileName = currentSong->fileName();
         player->setMedia(QUrl::fromLocalFile(fileName));
-//        if (player->mediaStatus() == QMediaPlayer::LoadedMedia && player->state() != QMediaPlayer::PlayingState) {
-//            setCurrentMetadata();
-//            player->play();
-//            ui->playButton->setText("Stop");
-//        }
     }
 }
 

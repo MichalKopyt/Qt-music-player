@@ -10,7 +10,6 @@
 #include <QObject>
 #include <QVariant>
 #include <QImage>
-#include <QFile>
 #include <QMediaPlayer>
 
 class Song : public QObject
@@ -29,10 +28,11 @@ public:
     QString album() const;
     QImage cover() const;
     QString fileName() const;
+
 signals:
     void songFileReady(Song*);
+
 private slots:
-    //void on_metadata_changed();
     void on_media_status_changed(QMediaPlayer::MediaStatus status);
 
 private:

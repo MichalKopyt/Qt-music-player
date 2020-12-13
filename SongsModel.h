@@ -8,13 +8,13 @@
 #define SONGSLIST_H
 
 #include <QAbstractTableModel>
-#include <QSize>
 #include <QModelIndex>
 #include <QVariant>
 #include "Song.h"
 
 class SongsModel : public QAbstractTableModel {
     Q_OBJECT
+
 public:
     SongsModel(QObject *parent = 0);
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -29,8 +29,10 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeAllRows(const QModelIndex &parent = QModelIndex());
     int getSongIndex(Song* song);
+
 signals:
     void songsAvailabilityChanged(bool hasSongs);
+
 private:
     QList<Song*> songsList;
 };
