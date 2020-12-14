@@ -32,9 +32,9 @@ private slots:
 
     void on_volumeSlider_sliderMoved(int position);
 
-    void on_position_changed(qint64 position);
+    void on_positionChanged(qint64 position);
 
-    void on_duration_changed(qint64 position);
+    void on_durationChanged(qint64 position);
 
     void on_action_Add_files_triggered();
 
@@ -46,7 +46,7 @@ private slots:
 
     void on_action_Clear_playlist_triggered();
 
-    void on_media_status_changed(QMediaPlayer::MediaStatus status);
+    void on_mediaStatusChanged(QMediaPlayer::MediaStatus status);
 
     void on_nextButton_clicked();
 

@@ -21,9 +21,9 @@ MainWindow::MainWindow(QWidget *parent)
     model = new SongsModel(this);
     ui->tableView->setModel(model);
 
-    connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_position_changed);
-    connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_duration_changed);
-    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_media_status_changed);
+    connect(player, &QMediaPlayer::positionChanged, this, &MainWindow::on_positionChanged);
+    connect(player, &QMediaPlayer::durationChanged, this, &MainWindow::on_durationChanged);
+    connect(player, &QMediaPlayer::mediaStatusChanged, this, &MainWindow::on_mediaStatusChanged);
     connect(model, &SongsModel::songsAvailabilityChanged, this, [&](bool b) {
         ui->action_Clear_playlist->setEnabled(b);
         if (!(ui->tableView->selectionModel()->selectedRows().isEmpty()))
@@ -70,13 +70,13 @@ void MainWindow::on_volumeSlider_sliderMoved(int position)
     player->setVolume(position);
 }
 
-void MainWindow::on_position_changed(qint64 position)
+void MainWindow::on_positionChanged(qint64 position)
 {
     ui->progressSlider->setValue(position);
     setTimeLabelText(ui->progressLabel, position);
 }
 
-void MainWindow::on_duration_changed(qint64 position)
+void MainWindow::on_durationChanged(qint64 position)
 {
     if (position <= 0 && player->mediaStatus() != QMediaPlayer::NoMedia)
         return;
@@ -184,7 +184,7 @@ void MainWindow::on_action_Clear_playlist_triggered()
     model->removeAllRows();
 }
 
-void MainWindow::on_media_status_changed(QMediaPlayer::MediaStatus status)
+void MainWindow::on_mediaStatusChanged(QMediaPlayer::MediaStatus status)
 {
     switch(status){
     case QMediaPlayer::LoadedMedia:
